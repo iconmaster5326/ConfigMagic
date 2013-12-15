@@ -19,7 +19,7 @@ This program is written in Lua 5.1 using the IUP and LFS libraries. You will nee
 Planned Features
 ================
 
-* A method to limit the criteria in the list view
+* Custom searching in the list view
 * Auto conflict resolution
 * A free ID range finder
 * Automatic compensation for the item ID +256 bug
