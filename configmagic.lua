@@ -78,10 +78,10 @@ function OpenListView(entries)
 	local exit = iup.item{title="Exit"}
 	local file = iup.submenu{iup.menu{reload,opendir,{},finder,auto,{},exit};title="File"}
 
-	local vall = iup.item{title="See All IDs",value="ON",active="NO"}
-	local vcon = iup.item{title="See Conflicted IDs",active="NO"}
-	local vfine = iup.item{title="See Fine IDs",active="NO"}
-	local vcustom = iup.item{title="See Custom Search",active="NO"}
+	local vall = iup.item{title="See All IDs",value=IsView("ALL")}
+	local vcon = iup.item{title="See Conflicted IDs",value=IsView("CON")}
+	local vfine = iup.item{title="See Fine IDs",value=IsView("FINE")}
+	local vcustom = iup.item{title="See Custom Search",value=IsView("CUSTOM"),active="NO"}
 	local editcustom = iup.item{title="Edit Search Criteria...",active="NO"}
 	local view = iup.submenu{iup.menu{vall,vcon,vfine,vcustom,{},editcustom};title="View"}
 
@@ -130,6 +130,39 @@ function OpenListView(entries)
 			dlg2:destroy()
 		end
 		iup.Popup(dlg2)
+	end
+	function vall:action()
+		if see ~= "ALL" then
+			see = "ALL"
+			dlg:destroy()
+			OpenListView(_G.entries)
+		end
+	end
+	function vcon:action()
+		if see ~= "CON" then
+			see = "CON"
+			dlg:destroy()
+			local new = {}
+			for i,v in ipairs(_G.entries) do
+				if conflicts[v.id] then
+					table.insert(new,v)
+				end
+			end
+			OpenListView(new)
+		end
+	end
+	function vfine:action()
+		if see ~= "FINE" then
+			see = "FINE"
+			dlg:destroy()
+			local new = {}
+			for i,v in ipairs(_G.entries) do
+				if not conflicts[v.id] then
+					table.insert(new,v)
+				end
+			end
+			OpenListView(new)
+		end
 	end
 
 	cfglist:setcell(0,1,"Type")
@@ -369,9 +402,14 @@ function SaveSettings()
 	file:close()
 end
 
+function IsView(v)
+	if v==see then return "ON" end
+end
+
 COLOR_GREEN = "0 196 0"
 COLOR_RED = "196 0 0"
 thisdir = lfs.currentdir()
-VER = "0.1.1"
+VER = "0.1.2"
+see = "ALL"
 
 LoadSettings()
