@@ -85,7 +85,7 @@ function OpenListView(entries)
 	local editcustom = iup.item{title="Edit Search Criteria...",active="NO"}
 	local view = iup.submenu{iup.menu{vall,vcon,vfine,vcustom,{},editcustom};title="View"}
 
-	local settings = iup.item{title="Settings...",active="NO"}
+	local settings = iup.item{title="Settings..."}
 	local about = iup.item{title="About..."}
 	local options = iup.submenu{iup.menu{settings,about};title="Options"}
 
@@ -93,6 +93,7 @@ function OpenListView(entries)
 	local dlg = iup.dialog{mainp; title="Config Magic",size="290xHALF",menu=menu}
 
 	function reload:action()
+		SaveSettings()
 		dlg:destroy()
 		LoadSettings()
 	end
@@ -103,7 +104,32 @@ function OpenListView(entries)
 		os.execute("explorer  /root,\""..maindir:gsub("/","\\").."\"")
 	end
 	function about:action()
-		iup.Message("About","Config Magic v. 0.1.0. Written by Iconmaster in 2013.")
+		iup.Message("About","Config Magic v. "..VER..". Written by Iconmaster in 2013.")
+	end
+	function settings:action()
+		local dirl = iup.label{title="MC Config:",alignment="ALEFT:ACENTER",size="60x"}
+		local dirt = iup.text{value=maindir,alignment="ARIGHT:ACENTER",size="120x"}
+		local dirbox = iup.hbox{dirl,dirt}
+		local ok = iup.button{title="OK",alignment="ACENTER:ACENTER",expand="HORIZONTAL"}
+		local cancel = iup.button{title="Cancel",alignment="ACENTER:ACENTER",expand="HORIZONTAL"}
+		local buttons = iup.hbox{ok,cancel}
+		local panel = iup.vbox{dirbox,buttons;gap=8}
+		local dlg2 = iup.dialog{panel,size="200x40"}
+		function ok:action()
+			if maindir ~= dirt.value then
+				maindir = dirt.value
+				dlg:destroy()
+				dlg2:destroy()
+				SaveSettings()
+				LoadSettings()
+				return
+			end
+			dlg2:destroy()
+		end
+		function cancel:action()
+			dlg2:destroy()
+		end
+		iup.Popup(dlg2)
 	end
 
 	cfglist:setcell(0,1,"Type")
@@ -344,5 +370,6 @@ end
 COLOR_GREEN = "0 196 0"
 COLOR_RED = "196 0 0"
 thisdir = lfs.currentdir()
+VER = "0.1.1"
 
 LoadSettings()
