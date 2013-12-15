@@ -23,6 +23,7 @@ Planned Features
 * Auto conflict resolution
 * A free ID range finder
 * Automatic compensation for the item ID +256 bug
+* Config backups
 * Much, much more!
 
 Disclaimer
