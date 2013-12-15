@@ -222,6 +222,8 @@ function OpenPropertyWindow(cfglist,entries,entry)
 			end
 			file = io.open(entry.loc,"w")
 			file:write(new)
+			file:flush()
+			file:close()
 			entry.id = newid
 		end
 		doneprop = true
