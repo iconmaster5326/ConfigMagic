@@ -90,7 +90,7 @@ function OpenListView(entries)
 	local options = iup.submenu{iup.menu{settings,about};title="Options"}
 
 	local menu = iup.menu{file,view,options}
-	local dlg = iup.dialog{mainp; title="Config Magic",size="290xHALF",menu=menu}
+	local dlg = iup.dialog{mainp; title="Config Magic",size="290x300",menu=menu}
 
 	function reload:action()
 		SaveSettings()
